@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import unittest
 
-from apache_conf_parser.collections.argument_list import ArgumentList
+from apache_conf_parser.lists.argument_list import ArgumentList
 from apache_conf_parser.exceptions import DirectiveError
 
 

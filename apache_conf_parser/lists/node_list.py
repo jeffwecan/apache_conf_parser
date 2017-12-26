@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-from apache_conf_parser.collections.list_adapter import ListAdapter
+from apache_conf_parser.lists.list_adapter import ListAdapter
 
 
 class NodeList(ListAdapter):

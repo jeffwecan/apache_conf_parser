@@ -2,7 +2,7 @@
 
 import re
 
-from apache_conf_parser.collections.list_adapter import ListAdapter
+from apache_conf_parser.lists.list_adapter import ListAdapter
 from apache_conf_parser.exceptions import DirectiveError
 
 

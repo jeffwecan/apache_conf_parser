@@ -3,7 +3,7 @@
 import re
 from abc import ABCMeta, abstractmethod
 
-from apache_conf_parser.collections.argument_list import ArgumentList
+from apache_conf_parser.lists.argument_list import ArgumentList
 from apache_conf_parser.exceptions import DirectiveError, NodeCompleteError
 from apache_conf_parser.nodes import Node
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import unittest
 
-from apache_conf_parser.collections.node_list import NodeList
+from apache_conf_parser.lists.node_list import NodeList
 from apache_conf_parser.directives.complex_directive import ComplexDirective
 
 

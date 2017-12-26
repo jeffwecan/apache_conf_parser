@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from apache_conf_parser.collections.node_list import NodeList
+from apache_conf_parser.lists.node_list import NodeList
 from apache_conf_parser.exceptions import NodeCompleteError, NodeMatchError, NestingLimitError
 from apache_conf_parser.nodes import Node
 
