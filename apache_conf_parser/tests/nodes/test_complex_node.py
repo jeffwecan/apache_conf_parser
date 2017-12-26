@@ -1,13 +1,12 @@
+#!/usr/bin/env python
+import unittest
 
-
-from unittest import TestCase
-
-from apache_conf_parser.nodes import complex_node
 from apache_conf_parser.directives.complex_directive import ComplexDirective
 from apache_conf_parser.exceptions import NestingLimitError, NodeMatchError, NodeCompleteError
+from apache_conf_parser.nodes import complex_node
 
 
-class TestComplexNode(TestCase):
+class TestComplexNode(unittest.TestCase):
 
     def test_str_method_new_complex_node(self):
         node = complex_node.ComplexNode(ComplexDirective.get_node_candidates())
@@ -101,3 +100,7 @@ class TestComplexNode(TestCase):
         ]
         for test_line in test_lines:
             node.add_line(test_line)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,11 +1,11 @@
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from apache_conf_parser.collections.node_list import NodeList
 from apache_conf_parser.directives.complex_directive import ComplexDirective
 
 
-class TestNodeList(TestCase):
+class TestNodeList(unittest.TestCase):
 
     def test_stable_property_when_empty(self):
         node_list = NodeList()
@@ -37,3 +37,7 @@ class TestNodeList(TestCase):
             expr=actual,
             msg='NodeList containing unstable node(s) should be considered unstable. Instead node_list.stable returned True.',
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

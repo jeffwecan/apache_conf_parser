@@ -67,3 +67,24 @@ class Directive(Node):
 
     def __repr__(self):
         return "<%s Directive at %s>" % (self.name, id(self))
+
+    def parse_directive_header(self, line):
+        if self.complete:
+            raise NodeCompleteError("Cannot add to the header of a complete directive.")
+        if not line:
+            raise DirectiveError("An empty line is not a valid header line.")
+        stable = True
+        if line[-1] == '\\':
+            line = line[:-1]
+            stable = False
+        parts = line.strip().split()
+
+        # Retrieve the directive name from the beginning of the line
+        if self.name is None:
+            print('self_name is none')
+            self.name = parts.pop(0)
+
+        # Store the remainder of the directive in the arguments attribute
+        for part in parts:
+            self.arguments.append(part)
+        self._stable = stable

@@ -1,6 +1,5 @@
-
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from parameterized import parameterized
 
@@ -8,7 +7,7 @@ from apache_conf_parser.directives.rewrite_cond import RewriteCondDirective
 from apache_conf_parser.exceptions import NodeCompleteError
 
 
-class TestRewriteCond(TestCase):
+class TestRewriteCond(unittest.TestCase):
 
     @parameterized.expand([
         ("file attribute test", 'RewriteCond /var/www/%{REQUEST_URI} !-f'),
@@ -69,3 +68,7 @@ class TestRewriteCond(TestCase):
             second=actual,
             msg='Expected flags attribute to be {}, received: {}'.format(expected, actual),
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

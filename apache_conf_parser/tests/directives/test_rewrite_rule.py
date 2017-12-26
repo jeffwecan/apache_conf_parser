@@ -1,12 +1,11 @@
-
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from apache_conf_parser.directives.rewrite_rule import RewriteRule
 from apache_conf_parser.exceptions import NodeCompleteError, ParserError, InvalidLineError
 
 
-class TestRewriteRule(TestCase):
+class TestRewriteRule(unittest.TestCase):
 
     def test_str_method_new_simple_directive(self):
         directive = RewriteRule()
@@ -105,3 +104,7 @@ class TestRewriteRule(TestCase):
             second=actual,
             msg='Expected directive str representation to be {}, received: {}'.format(expected, actual),
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

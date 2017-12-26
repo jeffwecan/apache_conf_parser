@@ -1,13 +1,12 @@
-
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from parameterized import parameterized
 
 from apache_conf_parser.directives.rewrite_base import RewriteBase
 
 
-class TestRewriteBase(TestCase):
+class TestRewriteBase(unittest.TestCase):
 
     @parameterized.expand([
         ("normal", 'RewriteBase /some/path', '/some/path'),
@@ -37,3 +36,7 @@ class TestRewriteBase(TestCase):
             obj=directive.matches,
             msg='Directive not expected to match RewriteBase for "%s" ("%s"), it did match.' % (name, directive_line)
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

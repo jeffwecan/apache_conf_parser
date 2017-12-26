@@ -1,10 +1,53 @@
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from apache_conf_parser.collections.list_adapter import ListAdapter
 
 
-class TestListAdapter(TestCase):
+class TestListAdapter(unittest.TestCase):
+
+    def test___init___empty_2(self):
+        iterable = []
+        self.assertEqual(list(ListAdapter(*iterable)), [])
+
+    def test___init___plain(self):
+        self.assertEqual(list(ListAdapter(1, 2)), [1, 2])
+
+    def test___init___list(self):
+        iterable = [1, 2]
+        self.assertEqual(list(ListAdapter(*iterable)), [1, 2])
+
+    def test___init___tuple(self):
+        iterable = (1, 2)
+        self.assertEqual(list(ListAdapter(*iterable)), [1, 2])
+
+    def test___init___generator(self):
+        iterable = (x for x in [1, 2])
+        self.assertEqual(list(ListAdapter(*iterable)), [1, 2])
+
+    def test___init___lc(self):
+        iterable = [x for x in [1, 2]]
+        self.assertEqual(list(ListAdapter(*iterable)), [1, 2])
+
+    def test___init___items(self):
+        la = ListAdapter(1, 2)
+        self.assertEqual(la.items, [1, 2])
+
+    def test___len___empty(self):
+        la = ListAdapter()
+        self.assertEqual(len(la), 0)
+
+    def test___len___not_empty(self):
+        la = ListAdapter(1, 2)
+        self.assertEqual(len(la), 2)
+
+    def test___contains___empty(self):
+        la = ListAdapter()
+        self.assertFalse(1 in la)
+
+    def test___contains___not_empty(self):
+        la = ListAdapter(1, 2)
+        self.assertTrue(1 in la)
 
     def test_instantiation(self):
         list_adapter = ListAdapter()
@@ -86,3 +129,7 @@ class TestListAdapter(TestCase):
             expr=actual,
             msg='Expected list_adapter to be less than or equal to itself'
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

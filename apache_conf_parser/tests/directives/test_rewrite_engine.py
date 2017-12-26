@@ -1,13 +1,12 @@
-
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from parameterized import parameterized
 
 from apache_conf_parser.directives.rewrite_engine import RewriteEngine
 
 
-class TestRewriteEngine(TestCase):
+class TestRewriteEngine(unittest.TestCase):
 
     @parameterized.expand([
         ("on", 'RewriteEngine on', 'on'),
@@ -42,3 +41,7 @@ class TestRewriteEngine(TestCase):
             obj=directive.matches,
             msg='Directive not expected to match RewriteCond for "%s" ("%s"), it did match.' % (name, directive_line)
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

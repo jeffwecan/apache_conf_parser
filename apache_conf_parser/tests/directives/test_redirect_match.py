@@ -1,12 +1,11 @@
-
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from apache_conf_parser.directives.redirect_match import RedirectMatch
 from apache_conf_parser.exceptions import NodeCompleteError, ParserError, InvalidLineError
 
 
-class TestRedirectMatch(TestCase):
+class TestRedirectMatch(unittest.TestCase):
 
     def test_str_method_new_simple_directive(self):
         directive = RedirectMatch()
@@ -105,3 +104,7 @@ class TestRedirectMatch(TestCase):
             second=actual,
             msg='Expected directive str representation to be {}, received: {}'.format(expected, actual),
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,12 +1,297 @@
-
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from apache_conf_parser.directives.simple_directive import SimpleDirective
 from apache_conf_parser.exceptions import NodeCompleteError, ParserError, InvalidLineError, DirectiveError
 
 
-class TestSimpleDirective(TestCase):
+class TestSimpleDirective(unittest.TestCase):
+    CLASS = SimpleDirective
+
+    def test_not_complete(self):
+        node = self.CLASS()
+        self.assertFalse(node.complete)
+
+    def test_not_changed(self):
+        node = self.CLASS()
+        self.assertFalse(node.changed)
+
+    def test_lines_empty(self):
+        node = self.CLASS()
+        self.assertEqual(node.lines, [])
+
+    def test_match_None(self):
+        self.assertFalse(self.CLASS.match(None))
+
+    def test_match_empty(self):
+        self.assertFalse(self.CLASS.match(""))
+
+    def test_match_comment_solo(self):
+        self.assertFalse(self.CLASS.match("#"))
+
+    def test_match_comment_solo_space(self):
+        self.assertFalse(self.CLASS.match(" #"))
+
+    def test_match_comment_space(self):
+        self.assertFalse(self.CLASS.match(" # this is a comment"))
+
+    def test_match_comment_no_space(self):
+        self.assertFalse(self.CLASS.match("# this is a comment"))
+
+    def test_match_comment_continuation(self):
+        self.assertFalse(self.CLASS.match("# this is a comment\\"))
+
+    def test_match_blank_spaces(self):
+        self.assertFalse(self.CLASS.match("   "))
+
+    def test_match_blank_tabs(self):
+        self.assertFalse(self.CLASS.match("		"))
+
+    def test_match_blank_continuation(self):
+        self.assertFalse(self.CLASS.match("   \\"))
+
+    def test_match_simple_directive_just_name(self):
+        self.assertTrue(self.CLASS.match("name"))
+
+    def test_match_simple_directive_just_name_leading_space(self):
+        self.assertTrue(self.CLASS.match(" name"))
+
+    def test_match_simple_directive_just_name_trailing_space(self):
+        self.assertTrue(self.CLASS.match("name "))
+
+    def test_match_simple_directive_just_name_continuation(self):
+        self.assertTrue(self.CLASS.match("name\\"))
+
+    def test_match_simple_directive_name_and_args(self):
+        self.assertTrue(self.CLASS.match("name something else"))
+
+    def test_match_simple_directive_leading_space(self):
+        self.assertTrue(self.CLASS.match("   name something else"))
+
+    def test_match_simple_directive_trailing_space(self):
+        self.assertTrue(self.CLASS.match("name something else   "))
+
+    def test_match_simple_directive_continuation(self):
+        self.assertTrue(self.CLASS.match("name something else\\"))
+
+    def test_match_complex_directive_empty(self):
+        self.assertFalse(self.CLASS.match("<>"))
+
+    def test_match_complex_directive_empty_space(self):
+        self.assertFalse(self.CLASS.match("< >"))
+
+    def test_match_complex_directive_just_name(self):
+        self.assertFalse(self.CLASS.match("<name>"))
+
+    def test_match_complex_directive_just_name_leading_space(self):
+        self.assertFalse(self.CLASS.match("< name>"))
+
+    def test_match_complex_directive_just_name_trailing_space(self):
+        self.assertFalse(self.CLASS.match("<name >"))
+
+    def test_match_complex_directive_just_name_open(self):
+        self.assertFalse(self.CLASS.match("<name"))
+
+    def test_match_complex_directive_just_name_open_continuation(self):
+        self.assertFalse(self.CLASS.match("<name\\"))
+
+    def test_match_complex_directive_just_name_open_space_continuation(self):
+        self.assertFalse(self.CLASS.match("<name \\"))
+
+    def test_match_complex_directive_just_name_invalid_1(self):
+        self.assertFalse(self.CLASS.match("<na+me>"))
+
+    def test_match_complex_directive_just_name_invalid_2(self):
+        self.assertFalse(self.CLASS.match("<na<me>"))
+
+    def test_match_complex_directive_name_and_args_open(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2"))
+
+    def test_match_complex_directive_name_and_args_open_continuation(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2\\"))
+
+    def test_match_complex_directive_name_and_args_open_space_continuation(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2 \\"))
+
+    def test_match_complex_directive_closed(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2>"))
+
+    def test_match_complex_directive_leading_space(self):
+        self.assertFalse(self.CLASS.match("  <name arg1 arg2>"))
+
+    def test_match_complex_directive_trailing_space(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2>  "))
+
+    def test_match_complex_directive_continuation(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2>\\"))
+
+    def test_match_complex_directive_space_continuation(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2> \\"))
+
+    def test_match_complex_directive_trailing_text(self):
+        self.assertFalse(self.CLASS.match("<name arg1 arg2> text"))
+
+    def test___str___empty(self):
+        node = self.CLASS()
+        with self.assertRaises(NodeCompleteError):
+            str(node)
+
+    def test___str___multiple(self):
+        line1 = "name arg1\\"
+        line2 = "arg2 arg3"
+        node = self.CLASS()
+        node.add_line(line1)
+        node.add_line(line2)
+        self.assertEqual(line1 + "\n" + line2, str(node))
+
+    def test___str___new(self):
+        line = "name"
+        node = self.CLASS()
+        node.add_line(line)
+        self.assertEqual(line, str(node))
+
+    def test___str___changed_1(self):
+        line = "name"
+        node = self.CLASS()
+        node.add_line(line)
+        node.changed = True
+        self.assertEqual(line, str(node))
+
+    def test___str___changed_2(self):
+        line = "name arg1"
+        node = self.CLASS()
+        node.add_line(line)
+        node.changed = True
+        self.assertEqual(line, str(node))
+
+    def test___str___changed_3(self):
+        line = "    name"
+        node = self.CLASS()
+        node.add_line(line)
+        node.changed = True
+        self.assertEqual("name", str(node))
+
+    def test___str___changed_4(self):
+        line = "    name arg1"
+        node = self.CLASS()
+        node.add_line(line)
+        node.changed = True
+        self.assertEqual("name arg1", str(node))
+
+    def test___str___changed_5(self):
+        line = "    name	arg1"
+        node = self.CLASS()
+        node.add_line(line)
+        node.changed = True
+        self.assertEqual("name arg1", str(node))
+
+    def test_add_line_complete_1(self):
+        node = self.CLASS()
+        node.name = "name"
+        node.complete = True
+        with self.assertRaises(NodeCompleteError):
+            node.add_line("")
+
+    def test_add_line_complete_2(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        with self.assertRaises(NodeCompleteError):
+            node.add_line("")
+
+    def test_add_line_complete_3(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        with self.assertRaises(NodeCompleteError):
+            node.add_line("arg2 arg3")
+
+    def test_add_line_incomplete_header_name_and_arg_bracket_arg(self):
+        node = self.CLASS()
+        with self.assertRaises(InvalidLineError):
+            node.add_line("name <arg1\\")
+
+    def test_add_line_incomplete_header_name_and_arg_bracket_arg_multi(self):
+        node = self.CLASS()
+        node.add_line("name arg1\\")
+        with self.assertRaises(InvalidLineError):
+            node.add_line("<arg2\\")
+        self.assertEqual(node.arguments[0], "arg1")
+
+    def test_add_line_complete_header_name_and_arg_bracket_arg_1(self):
+        node = self.CLASS()
+        with self.assertRaises(InvalidLineError):
+            node.add_line("name <arg1")
+
+    def test_add_line_complete_header_name_and_arg_bracket_arg_2(self):
+        node = self.CLASS()
+        with self.assertRaises(InvalidLineError):
+            node.add_line("name arg1>")
+
+    def test_add_line_complete_header_name_and_arg_bracket_arg_multi_1(self):
+        node = self.CLASS()
+        node.add_line("name arg1\\")
+        with self.assertRaises(InvalidLineError):
+            node.add_line("<arg2")
+        self.assertEqual(node.arguments[0], "arg1")
+
+    def test_add_line_complete_header_name_and_arg_bracket_arg_multi_2(self):
+        node = self.CLASS()
+        node.add_line("name arg1\\")
+        with self.assertRaises(InvalidLineError):
+            node.add_line("arg2>")
+        self.assertEqual(node.arguments[0], "arg1")
+
+    def test_add_line_added_first(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        self.assertEqual(node.lines[0], "name arg1")
+
+    def test_add_line_added_second_1(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        node.complete = False
+        node.add_line("arg2")
+        self.assertEqual(node.lines[0], "name arg1")
+        self.assertEqual(node.lines[1], "arg2")
+
+    def test_add_line_added_second_2(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        node.complete = False
+        node.add_line("arg2 ")
+        self.assertEqual(node.lines[0], "name arg1")
+        self.assertEqual(node.lines[1], "arg2 ")
+
+    def test_add_line_autocomplete(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        self.assertTrue(node.complete)
+
+    def test_add_line_autochanged(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        self.assertFalse(node.changed)
+
+    def test_add_line_continuation_1(self):
+        node = self.CLASS()
+        node.add_line("name arg1\\")
+        self.assertFalse(node.complete)
+
+    def test_add_line_continuation_2(self):
+        node = self.CLASS()
+        node.add_line("name arg1\\")
+        node.add_line("arg2\\")
+        self.assertFalse(node.complete)
+
+    def test_add_line_continuation_3(self):
+        node = self.CLASS()
+        node.add_line("name arg1\\")
+        node.add_line("arg2")
+        self.assertTrue(node.complete)
+
+    def test_add_line_space_continuation(self):
+        node = self.CLASS()
+        node.add_line("name arg1 \\")
+        self.assertFalse(node.complete)
 
     def test_str_method_new_simple_directive(self):
         directive = SimpleDirective()
@@ -173,3 +458,7 @@ class TestSimpleDirective(TestCase):
             second=actual,
             msg='Expected directive content property to be {}, received: {}'.format(expected, actual),
         )
+
+
+if __name__ == '__main__':
+    unittest.main()

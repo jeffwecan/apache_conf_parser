@@ -1,13 +1,12 @@
-
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 from unittest.mock import patch, mock_open
 
 from apache_conf_parser import ApacheConfParser
 from apache_conf_parser.exceptions import NodeCompleteError
 
 
-class TestApacheConfParser(TestCase):
+class TestApacheConfParser(unittest.TestCase):
 
     def test_read_conf_from_string(self):
         test_content = 'Redirect here there'
@@ -57,3 +56,7 @@ class TestApacheConfParser(TestCase):
                 container=err,
                 msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
             )
+
+
+if __name__ == '__main__':
+    unittest.main()

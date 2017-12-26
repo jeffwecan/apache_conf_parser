@@ -4,8 +4,8 @@ import re
 from apache_conf_parser.directives import Directive
 from apache_conf_parser.directives.simple_directive import SimpleDirective
 from apache_conf_parser.exceptions import DirectiveError, NodeCompleteError, InvalidLineError
-from apache_conf_parser.nodes.complex_node import ComplexNode
 from apache_conf_parser.nodes import Node
+from apache_conf_parser.nodes.complex_node import ComplexNode
 
 
 class ComplexDirective(Directive):

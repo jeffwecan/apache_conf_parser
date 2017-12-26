@@ -1,11 +1,11 @@
-
-from unittest import TestCase
+#!/usr/bin/env python
+import unittest
 
 from apache_conf_parser.collections.argument_list import ArgumentList
 from apache_conf_parser.exceptions import DirectiveError
 
 
-class TestArgumentList(TestCase):
+class TestArgumentList(unittest.TestCase):
 
     def test_instantiation(self):
         argument_list = ArgumentList()
@@ -59,3 +59,7 @@ class TestArgumentList(TestCase):
             second=actual,
             msg='Expected item at index 0 to be set to %s, found: %s' % (expected, actual)
         )
+
+
+if __name__ == '__main__':
+    unittest.main()
