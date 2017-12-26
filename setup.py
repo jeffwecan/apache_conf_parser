@@ -1,14 +1,12 @@
-from distutils.core import setup, Extension
+#!/usr/bin/env python
+from setuptools import setup
 
-setup (
-        name = 'apache_conf_parser',
-        version = '1.0',
-        description = 'Parse and manipulate apache conf files.',
-        author = "Eric Snow",
-        author_email = "ericsnowcurrently@gmail.com",
-        url = "https://bitbucket.org/ericsnowcurrently/apache_conf_parser/overview",
-        py_modules = [
-                "apache_conf_parser", 
-                "test_apache_conf_parser", 
-                ],
-        )
+setup(
+    name='apache_conf_parser',
+    version='1.0.1',
+    description='Parse and manipulate apache conf files.',
+    packages=['apache_conf_parser'],
+    zip_safe=False,
+    test_suite='nose.collector',
+    tests_require=['nose'],
+)
