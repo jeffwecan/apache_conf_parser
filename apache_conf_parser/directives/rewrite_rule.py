@@ -12,7 +12,7 @@ class RewriteRule(SimpleDirective):
     ]
     apache_module = 'mod_rewrite'
     description = 'Defines rules for the rewriting engine'
-    match_regexp = r'\s*RewriteRule\s+(?P<regexp>[^ ]*)\s+(?P<substitution>[^ ]*)\s*\[?(?P<flags>[^] ]*)?\]?$'
+    match_regexp = r'\s*RewriteRule\s+(?P<pattern>[^ ]*)\s+(?P<substitution>[^ ]*)\s*\[?(?P<flags>[^] ]*)?\]?$'
 
     @property
     def flags(self):

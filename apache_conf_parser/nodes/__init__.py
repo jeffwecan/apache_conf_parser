@@ -16,6 +16,7 @@ class Node(object):
 
     match_regexp = ".*"
     is_node_candidate = True
+    indent_str = ' ' * 4  # 4 spaces
 
     def __init__(self):
         self.lines = []
@@ -23,6 +24,10 @@ class Node(object):
         self._complete = False
         self.changed = False
         self.matches = None
+
+    @property
+    def name(self):
+        return None
 
     @property
     def complete(self):
@@ -36,6 +41,8 @@ class Node(object):
     def match(cls, line):
         if line is None:
             return False
+        if isinstance(cls.match_regexp, list):
+            return bool(any([re.match(r, line) for r in cls.match_regexp]))
         return bool(re.match(cls.match_regexp, line))
 
     @property
@@ -54,7 +61,14 @@ class Node(object):
         if self.complete:
             raise NodeCompleteError(line)
 
-        matches = re.match(self.match_regexp, line)
+        matches = None
+        if isinstance(self.match_regexp, list):
+            for regexp in self.match_regexp:
+                matches = re.match(regexp, line)
+                if matches:
+                    break
+        else:
+            matches = re.match(self.match_regexp, line)
         if matches:
             self.matches = matches.groupdict()
 
@@ -71,7 +85,7 @@ class Node(object):
         if self.matches is not None and attribute_name in self.matches:
             return self.matches.get(attribute_name)
         else:
-            raise AttributeError
+            raise AttributeError('No attribute named: %s' % attribute_name)
 
     @classmethod
     def get_subclasses(cls):
@@ -83,3 +97,7 @@ class Node(object):
             if inspect.isabstract(subclass) or not subclass.is_node_candidate:
                 continue
             yield subclass
+
+    def dumps(self, depth=0):
+        leading_indent_str = self.indent_str * depth
+        return "%s%s" % (leading_indent_str, str(self).lstrip())

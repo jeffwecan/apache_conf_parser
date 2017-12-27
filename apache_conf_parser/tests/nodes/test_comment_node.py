@@ -281,7 +281,8 @@ class TestCommentNode(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_match_when_line_is_none(self):
@@ -300,11 +301,11 @@ class TestCommentNode(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_str_method_when_not_changed_after_adding_line(self):
-
         node = CommentNode()
         test_comment = ' This is a comment'
         test_line = '#{comment}'.format(comment=test_comment)
@@ -325,7 +326,6 @@ class TestCommentNode(unittest.TestCase):
         )
 
     def test_str_method_when_changed_after_adding_line(self):
-
         node = CommentNode()
         test_comment = ' This is a comment'
         test_line = '#{comment}'.format(comment=test_comment)
@@ -355,7 +355,8 @@ class TestCommentNode(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
         self.assertFalse(
             expr=node.complete,
@@ -424,6 +425,54 @@ class TestCommentNode(unittest.TestCase):
             expr=node.match(test_line),
             msg='CommentNode.match(line) expected to return false for line: {}'.format(test_line),
         )
+
+    def test_dumps_empty(self):
+        node = self.CLASS()
+        with self.assertRaises(NodeCompleteError):
+            node.dumps()
+
+    def test_dumps_empty_depth_0(self):
+        node = self.CLASS()
+        with self.assertRaises(NodeCompleteError):
+            node.dumps(0)
+
+    def test_dumps_empty_depth_1(self):
+        node = self.CLASS()
+        with self.assertRaises(NodeCompleteError):
+            node.dumps(1)
+
+    def test_dumps_empty_depth_1_keyword(self):
+        node = self.CLASS()
+        with self.assertRaises(NodeCompleteError):
+            node.dumps(depth=1)
+
+    def test_dumps_empty_depth_2(self):
+        node = self.CLASS()
+        with self.assertRaises(NodeCompleteError):
+            node.dumps(2)
+
+    def test_dumps_depth_0(self):
+        node = self.CLASS()
+        node.add_line("# comment")
+        self.assertEqual("# comment", node.dumps(0))
+
+    def test_dumps_depth_1(self):
+        node = self.CLASS()
+        node.add_line("# comment")
+        self.assertEqual(self.CLASS().indent_str + "# comment", node.dumps(1))
+
+    def test_dumps_depth_2(self):
+        node = self.CLASS()
+        node.add_line("# comment")
+        self.assertEqual(self.CLASS().indent_str * 2 + "# comment", node.dumps(2))
+
+    # @u_mod.skip("Currently comments cannot have leading spaces.")
+    def test_dumps_leading_space(self):
+        line = " # comment"
+        node = self.CLASS()
+        node.add_line(line)
+        node.changed = True
+        self.assertEqual(line.lstrip(), str(node))
 
 
 if __name__ == '__main__':

@@ -244,7 +244,8 @@ class TestBlankNode(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_add_invalid_line(self):
@@ -298,7 +299,6 @@ class TestBlankNode(unittest.TestCase):
         )
 
     def test_str_method_when_not_changed_after_adding_line(self):
-
         node = BlankNode()
         test_line = ''
         node.add_line(test_line)
@@ -318,7 +318,6 @@ class TestBlankNode(unittest.TestCase):
         )
 
     def test_str_method_when_changed_after_adding_line(self):
-
         node = BlankNode()
         test_line = ''
         node.add_line(test_line)
@@ -339,7 +338,6 @@ class TestBlankNode(unittest.TestCase):
         )
 
     def test_str_method_when_changed_after_adding_line_and_lines_empty(self):
-
         node = BlankNode()
         test_line = ''
         node.add_line(test_line)
@@ -370,6 +368,41 @@ class TestBlankNode(unittest.TestCase):
     #         container=node.lines,
     #     )
     #     print(node.lines)
+
+    def test_dumps_blank_depth_0(self):
+        node = self.CLASS()
+        node.add_line("")
+        self.assertEqual("", node.dumps(0))
+
+    def test_dumps_blank_depth_1(self):
+        node = self.CLASS()
+        node.add_line("")
+        self.assertEqual("", node.dumps(1))
+
+    def test_dumps_blank_depth_2(self):
+        node = self.CLASS()
+        node.add_line("")
+        self.assertEqual("", node.dumps(2))
+
+    def test_dumps_depth_0(self):
+        node = self.CLASS()
+        node.add_line("    ")
+        self.assertEqual("", node.dumps(0))
+
+    def test_dumps_depth_1(self):
+        node = self.CLASS()
+        node.add_line("    ")
+        self.assertEqual("", node.dumps(1))
+
+    def test_dumps_depth_2(self):
+        node = self.CLASS()
+        node.add_line("    ")
+        self.assertEqual("", node.dumps(2))
+
+    def test_dumps_spaces(self):
+        node = self.CLASS()
+        node.add_line("    ")
+        self.assertEqual("", node.dumps())
 
 
 if __name__ == '__main__':

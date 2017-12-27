@@ -459,6 +459,19 @@ class TestSimpleDirective(unittest.TestCase):
             msg='Expected directive content property to be {}, received: {}'.format(expected, actual),
         )
 
+    def test_dumps_depth_0(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        self.assertEqual("name arg1", node.dumps(0))
+    def test_dumps_depth_1(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        self.assertEqual(self.CLASS().indent_str+"name arg1", node.dumps(1))
+    def test_dumps_depth_2(self):
+        node = self.CLASS()
+        node.add_line("name arg1")
+        self.assertEqual(self.CLASS().indent_str*2+"name arg1", node.dumps(2))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -12,3 +12,6 @@ class BlankNode(Node):
             raise InvalidLineError("Blank lines cannot have line continuations.")
         super(BlankNode, self).add_line(line)
         self._content = ""
+
+    def dumps(self, depth=0):
+        return ""

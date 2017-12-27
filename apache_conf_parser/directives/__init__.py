@@ -3,8 +3,8 @@
 import re
 from abc import ABCMeta, abstractmethod
 
-from apache_conf_parser.lists.argument_list import ArgumentList
 from apache_conf_parser.exceptions import DirectiveError, NodeCompleteError
+from apache_conf_parser.lists.argument_list import ArgumentList
 from apache_conf_parser.nodes import Node
 
 
@@ -81,10 +81,13 @@ class Directive(Node):
 
         # Retrieve the directive name from the beginning of the line
         if self.name is None:
-            print('self_name is none')
             self.name = parts.pop(0)
 
         # Store the remainder of the directive in the arguments attribute
         for part in parts:
             self.arguments.append(part)
         self._stable = stable
+
+    def dumps(self, depth=0):
+        leading_indent_str = self.indent_str * depth
+        return "%s%s %s" % (leading_indent_str, self.name, " ".join([arg for arg in self.arguments]))

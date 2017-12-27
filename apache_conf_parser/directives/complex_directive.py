@@ -112,3 +112,16 @@ class ComplexDirective(Directive):
             "\n" if self.body.nodes else "",
             self.tail,
         )
+
+    def dumps(self, depth=0):
+        if not self.complete:
+            raise NodeCompleteError("Can't print an incomplete complex directive.")
+
+        leading_indent_str = self.indent_str * depth
+        return "{indent_str}<{header}>\n{body}{subnodes}{indent_str}</name>".format(
+            indent_str=leading_indent_str,
+            header=self.header.dumps(),
+            body=self.body.dumps(depth=depth+1),
+            subnodes="\n" if self.body.nodes else "",
+            name=self.name,
+        )

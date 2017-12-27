@@ -62,3 +62,8 @@ class ComplexNode(Node):
         if not self.complete:
             raise NodeCompleteError("Can't turn an incomplete complex node into a string.")
         return "\n".join(str(node) for node in self.nodes)
+
+    def dumps(self, depth=0):
+        if not self.complete:
+            raise NodeCompleteError("Can't print an incomplete complex node.")
+        return "\n".join(node.dumps(depth) for node in self.nodes)

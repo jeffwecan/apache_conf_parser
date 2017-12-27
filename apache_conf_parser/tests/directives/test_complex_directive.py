@@ -1,5 +1,3 @@
-
-
 import unittest
 
 from apache_conf_parser.directives.complex_directive import ComplexDirective
@@ -640,7 +638,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_name_property(self):
@@ -695,7 +694,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_body_stable_check(self):
@@ -714,7 +714,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_add_line_to_complete_node(self):
@@ -732,7 +733,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_set_complete_after_all_complete(self):
@@ -766,7 +768,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_header_with_extraneous_tail(self):
@@ -782,7 +785,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_set_not_complete_after_all_complete(self):
@@ -801,7 +805,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_no_closing_tag_after_body_complete(self):
@@ -812,13 +817,13 @@ class TestComplexDirective(unittest.TestCase):
 
         test_line = 'Redirect here there'
         with self.assertRaises(InvalidLineError) as err:
-
             directive.add_line(test_line),
             expected_err_msg = "Expecting closing tag. Got:"
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_tail_match_before_body_complete(self):
@@ -842,7 +847,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_add_invalid_line(self):
@@ -854,7 +860,8 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised ParserError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised ParserError exception message, received: {}'.format(expected_err_msg,
+                                                                                                     err),
             )
 
     def test_str_magic_method_after_adding_line(self):
@@ -891,8 +898,113 @@ class TestComplexDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
+
+    def test_dumps_new(self):
+        node = self.CLASS()
+        with self.assertRaises(NodeCompleteError):
+            node.dumps()
+
+    def test_dumps_header_only(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        with self.assertRaises(NodeCompleteError):
+            node.dumps()
+
+    def test_dumps_not_complete(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("something else")
+        with self.assertRaises(NodeCompleteError):
+            node.dumps()
+
+    def test_dumps_depth_0(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n</name>", node.dumps(0))
+
+    def test_dumps_depth_0_spaces(self):
+        node = self.CLASS()
+        node.add_line("<name     arg1>")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n</name>", node.dumps(0))
+
+    def test_dumps_depth_0_tab(self):
+        node = self.CLASS()
+        node.add_line("<name	arg1>")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n</name>", node.dumps(0))
+
+    def test_dumps_depth_0_nested(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("something here")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n" + ComplexDirective.indent_str + "something here\n</name>", node.dumps(0))
+
+    def test_dumps_depth_0_nested_indent_stred_1(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("  something here")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n" + ComplexDirective.indent_str + "something here\n</name>", node.dumps(0))
+
+    def test_dumps_depth_0_nested_indent_stred_2(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("    something here")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n" + ComplexDirective.indent_str + "something here\n</name>", node.dumps(0))
+
+    def test_dumps_depth_1(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("</name>")
+        self.assertEqual("%s<name arg1>\n%s</name>" % ((ComplexDirective.indent_str,) * 2), node.dumps(1))
+
+    def test_dumps_depth_1_nested(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("something here")
+        node.add_line("</name>")
+        self.assertEqual("%s<name arg1>\n%s%ssomething here\n%s</name>" % ((ComplexDirective.indent_str,) * 4),
+                         node.dumps(1))
+
+    def test_dumps_depth_1_nested_indent_stred(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("    something here")
+        node.add_line("</name>")
+        self.assertEqual("%s<name arg1>\n%s%ssomething here\n%s</name>" % ((ComplexDirective.indent_str,) * 4),
+                         node.dumps(1))
+
+    def test_dumps_depth_2(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("</name>")
+        self.assertEqual("%s%s<name arg1>\n%s%s</name>" % ((ComplexDirective.indent_str,) * 4), node.dumps(2))
+
+    def test_dumps_leading_space_1(self):
+        node = self.CLASS()
+        node.add_line("  <name arg1>")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n</name>", node.dumps())
+
+    def test_dumps_leading_space_2(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("  </name>")
+        self.assertEqual("<name arg1>\n</name>", node.dumps())
+
+    def test_dumps_leading_space_3(self):
+        node = self.CLASS()
+        node.add_line("<name arg1>")
+        node.add_line("something else")
+        node.add_line("</name>")
+        self.assertEqual("<name arg1>\n%ssomething else\n</name>" % ComplexDirective.indent_str, node.dumps())
 
 
 if __name__ == '__main__':

@@ -30,13 +30,13 @@ class TestRewriteRule(unittest.TestCase):
             msg='Expected lines attribute to be {}, received: {}'.format(expected, actual),
         )
 
-    def test_regexp_match(self):
+    def test_pattern_match(self):
         directive = RewriteRule()
         regexp = '/from.*here'
         test_line = 'RewriteRule %s /to-here' % regexp
         directive.add_line(test_line)
         expected = regexp
-        actual = directive.regexp
+        actual = directive.pattern
         self.assertEqual(
             first=expected,
             second=actual,

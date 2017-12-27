@@ -53,7 +53,7 @@ class TestRedirect(unittest.TestCase):
         self.assertEqual(
             first=expected,
             second=actual,
-            msg='Expected status attribute to be {}, received: {}'.format(expected, actual),
+            msg='Expected status attribute to be {}, received: {}'.format(expected, directive.matches),
         )
 
     def test_url_match(self):
