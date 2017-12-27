@@ -6,7 +6,6 @@ from apache_conf_parser.exceptions import NestingLimitError, NodeMatchError, Nod
 from apache_conf_parser.nodes.complex_node import ComplexNode
 
 
-
 class TestComplexNode(unittest.TestCase):
 
     def test_str_method_new_complex_node(self):

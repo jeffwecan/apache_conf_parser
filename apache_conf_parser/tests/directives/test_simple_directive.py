@@ -301,7 +301,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_add_line(self):
@@ -329,7 +330,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_add_to_header_with_none_as_arg(self):
@@ -341,7 +343,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised DirectiveError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised DirectiveError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_add_to_header_with_trailing_backslash_in_line(self):
@@ -353,7 +356,8 @@ class TestSimpleDirective(unittest.TestCase):
         self.assertEqual(
             first=expected_argument,
             second=actual_argument,
-            msg='Expected first argument for directive to be {}, received: {}'.format(expected_argument, actual_argument),
+            msg='Expected first argument for directive to be {}, received: {}'.format(expected_argument,
+                                                                                      actual_argument),
         )
 
     def test_set_name_twice(self):
@@ -366,7 +370,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised DirectiveError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised DirectiveError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
         # expected = [test_line]
         # actual = directive.lines
@@ -385,7 +390,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised ParserError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised ParserError exception message, received: {}'.format(expected_err_msg,
+                                                                                                     err),
             )
 
     def test_add_line_with_none_as_arg(self):
@@ -397,7 +403,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised InvalidLineError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_set_unstable_directive_to_complete(self):
@@ -408,7 +415,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_str_magic_method_after_adding_line(self):
@@ -432,7 +440,8 @@ class TestSimpleDirective(unittest.TestCase):
             self.assertIn(
                 member=expected_err_msg,
                 container=err,
-                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(expected_err_msg, err),
+                msg='Expected "{}" in the raised NodeCompleteError exception message, received: {}'.format(
+                    expected_err_msg, err),
             )
 
     def test_repr_magic_method(self):
@@ -463,14 +472,16 @@ class TestSimpleDirective(unittest.TestCase):
         node = self.CLASS()
         node.add_line("name arg1")
         self.assertEqual("name arg1", node.dumps(0))
+
     def test_dumps_depth_1(self):
         node = self.CLASS()
         node.add_line("name arg1")
-        self.assertEqual(self.CLASS().indent_str+"name arg1", node.dumps(1))
+        self.assertEqual(self.CLASS().indent_str + "name arg1", node.dumps(1))
+
     def test_dumps_depth_2(self):
         node = self.CLASS()
         node.add_line("name arg1")
-        self.assertEqual(self.CLASS().indent_str*2+"name arg1", node.dumps(2))
+        self.assertEqual(self.CLASS().indent_str * 2 + "name arg1", node.dumps(2))
 
 
 if __name__ == '__main__':

@@ -121,7 +121,7 @@ class ComplexDirective(Directive):
         return "{indent_str}<{header}>\n{body}{subnodes}{indent_str}</name>".format(
             indent_str=leading_indent_str,
             header=self.header.dumps(),
-            body=self.body.dumps(depth=depth+1),
+            body=self.body.dumps(depth=depth + 1),
             subnodes="\n" if self.body.nodes else "",
             name=self.name,
         )
