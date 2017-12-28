@@ -3,7 +3,7 @@ import unittest
 
 from parameterized import parameterized
 
-from apache_conf_parser.directives.rewrite_cond import RewriteCondDirective
+from apache_conf_parser.directives.rewrite_cond import RewriteCond
 from apache_conf_parser.exceptions import NodeCompleteError
 
 
@@ -15,7 +15,7 @@ class TestRewriteCond(unittest.TestCase):
         ("variable in test string", 'RewriteCond  "%{HTTP_USER_AGENT}"  "(iPhone|Blackberry|Android)"')
     ])
     def test_matches_valid_directives(self, name, directive_line):
-        directive = RewriteCondDirective()
+        directive = RewriteCond()
         directive.add_line(directive_line)
         self.assertIsNotNone(
             obj=directive.matches,
@@ -26,7 +26,7 @@ class TestRewriteCond(unittest.TestCase):
         ("wrong name", 'RewriteRule /here /there'),
     ])
     def test_does_not_match_invalid_directives(self, name, directive_line):
-        directive = RewriteCondDirective()
+        directive = RewriteCond()
         directive.add_line(directive_line)
         self.assertIsNone(
             obj=directive.matches,
@@ -34,7 +34,7 @@ class TestRewriteCond(unittest.TestCase):
         )
 
     def test_str_method_new_simple_directive(self):
-        directive = RewriteCondDirective()
+        directive = RewriteCond()
         with self.assertRaises(NodeCompleteError) as err:
             str(directive)
             expected_err_msg = "Can't turn an uninitialized simple directive into a string."
@@ -45,7 +45,7 @@ class TestRewriteCond(unittest.TestCase):
             )
 
     def test_add_line(self):
-        directive = RewriteCondDirective()
+        directive = RewriteCond()
         test_line = 'RewriteCond /from-here /to-here'
         directive.add_line(test_line)
         expected = [test_line]
@@ -57,7 +57,7 @@ class TestRewriteCond(unittest.TestCase):
         )
 
     def test_flags_match(self):
-        directive = RewriteCondDirective()
+        directive = RewriteCond()
         flags = ['L']
         test_line = 'RewriteCond /from-here /to-here [%s]' % ','.join(flags)
         directive.add_line(test_line)

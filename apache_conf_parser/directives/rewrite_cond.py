@@ -3,7 +3,7 @@
 from apache_conf_parser.directives.simple_directive import SimpleDirective
 
 
-class RewriteCondDirective(SimpleDirective):
+class RewriteCond(SimpleDirective):
     contexts = [
         'server_config',
         'virtual_host',
