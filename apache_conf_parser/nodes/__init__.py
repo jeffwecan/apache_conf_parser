@@ -101,3 +101,10 @@ class Node(object):
     def dumps(self, depth=0):
         leading_indent_str = self.indent_str * depth
         return "%s%s" % (leading_indent_str, str(self).lstrip())
+
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(self, other.__class__) and hasattr(other, '__dict__'):
+            diff = {k: (v, other.__dict__.get(k)) for k, v in self.__dict__.items() if other.__dict__.get(k) != v}
+            return all([v[0] == v[1] for k, v in diff.items() if k not in ['lines']])
+        return False

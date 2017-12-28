@@ -167,6 +167,23 @@ class TestNode(unittest.TestCase):
         node.add_line("  first")
         self.assertEqual("first", node.dumps())
 
+    def test_eq_blank_node(self):
+        node1 = self.CLASS()
+        node2 = self.CLASS()
+        self.assertEqual(node1, node2)
+
+    def test_eq_diff_class(self):
+        node1 = self.CLASS()
+        node2 = object()
+        self.assertNotEquals(node1, node2)
+
+    def test_eq_same_lines(self):
+        node1 = self.CLASS()
+        node1.add_line('first')
+        node2 = self.CLASS()
+        node2.add_line('first')
+        self.assertEqual(node1, node2)
+
 
 if __name__ == '__main__':
     unittest.main()
