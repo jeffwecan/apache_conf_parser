@@ -513,14 +513,14 @@ class TestComplexDirective(unittest.TestCase):
         node = self.CLASS()
         node.add_line("<name arg1>")
         node.add_line("  <something else>")
-        with self.assertRaises(NodeCompleteError):
+        with self.assertRaises(NodeMatchError):
             node.add_line("</name>")
 
     def test_add_line_body_not_stable_close_2(self):
         node = self.CLASS()
         node.add_line("<name arg1>")
         node.add_line("  something else\\")
-        with self.assertRaises(NodeCompleteError):
+        with self.assertRaises(InvalidLineError):
             node.add_line("</name>")
         self.assertEqual(node.body.nodes[0].arguments[0], "else")
 

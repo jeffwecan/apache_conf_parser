@@ -88,13 +88,16 @@ class ComplexDirective(Directive):
         if not self.header.complete:
             self.parse_header(line)
         # then the body
-        elif not self.body.stable and not re.match("\s*</%s>\s*$" % self.name, line):
+        elif not self.body.stable and not re.match("\s*<\/%s>\s*$" % self.name, line):
             self.body.add_line(line, depth + 1)
         # check for the closing tag / tail
-        elif re.match("\s*</%s>\s*$" % self.name, line):
-            self.body.complete = True
-            self.tail = line
-            self.tailmatch = True
+        elif re.match("\s*<\/%s>\s*$" % self.name, line):
+            try:
+                self.body.complete = True
+                self.tail = line
+                self.tailmatch = True
+            except NodeCompleteError as err:
+                self.body.add_line(line, depth + 1)
         # if we haven't found the closing tag / tail, keep adding to the body
         elif not self.body.complete:
             self.body.add_line(line, depth + 1)
@@ -118,7 +121,7 @@ class ComplexDirective(Directive):
             raise NodeCompleteError("Can't print an incomplete complex directive.")
 
         leading_indent_str = self.indent_str * depth
-        return "{indent_str}<{header}>\n{body}{subnodes}{indent_str}</name>".format(
+        return "{indent_str}<{header}>\n{body}{subnodes}{indent_str}</{name}>".format(
             indent_str=leading_indent_str,
             header=self.header.dumps(),
             body=self.body.dumps(depth=depth + 1),
